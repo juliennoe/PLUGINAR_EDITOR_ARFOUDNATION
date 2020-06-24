@@ -1,0 +1,206 @@
+﻿#if (UNITY_EDITOR) 
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using UnityEditor.SceneManagement;
+using System.IO;
+using UnityEngine.XR.ARSubsystems;
+using UnityEditor.XR.ARFoundation;
+using UnityEngine.XR.ARFoundation;
+using UnityEngine.SpatialTracking;
+using UnityEditor;
+
+
+[ExecuteInEditMode]
+public class pluginAR : MonoBehaviour
+{
+
+    public string title;
+    public Sprite background;
+
+    public Material _customLine;
+    private GameObject refCanvas;
+    private string _Path;
+    public ARSessionOrigin m_arSess;
+    public ARPlaneManager m_arPlaneManager;
+
+    public void Start()
+    {
+        m_arSess = FindObjectOfType<ARSessionOrigin>();
+        m_arSess.camera = FindObjectOfType<Camera>();
+
+        m_arPlaneManager = FindObjectOfType<ARPlaneManager>();
+        m_arPlaneManager.planePrefab = FindObjectOfType<ARPlane>().gameObject;
+
+    }
+
+    public void CreateFolder()
+    {
+
+        if (AssetDatabase.IsValidFolder("Assets/_REFERENCES"))
+        {
+            Debug.Log("Your Folders already exists !"); ;
+        }
+        else
+        {
+            AssetDatabase.CreateFolder("Assets", "_REFERENCES");
+            AssetDatabase.CreateFolder("Assets/_REFERENCES", "3D");
+            AssetDatabase.CreateFolder("Assets/_REFERENCES", "2D");
+            AssetDatabase.CreateFolder("Assets/_REFERENCES", "MATERIALS");
+            AssetDatabase.CreateFolder("Assets/_REFERENCES", "ANIMATIONS");
+            AssetDatabase.CreateFolder("Assets/_REFERENCES", "SCRIPTS");
+            AssetDatabase.CreateFolder("Assets/_REFERENCES", "SCENES");
+            AssetDatabase.CreateFolder("Assets", "Editor");
+            AssetDatabase.CreateFolder("Assets/Editor", "Resources");
+
+            AssetDatabase.MoveAsset("Assets/pluginAR.cs", "Assets/_REFERENCES/SCRIPTS/pluginAR.cs");
+            AssetDatabase.MoveAsset("Assets/pluginAR.meta", "Assets/_REFERENCES/SCRIPTS/pluginAR.meta");
+            AssetDatabase.MoveAsset("Assets/pluginAREditor.cs", "Assets/Editor/pluginAREditor.cs");
+            AssetDatabase.MoveAsset("Assets/pluginAREditor.meta", "Assets/Editor/pluginAREditor.meta");
+
+            AssetDatabase.Refresh();
+
+        }
+    }
+
+    public void SceneMenu()
+    {
+
+
+        _Path = Application.dataPath;
+        var newScene = EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects, NewSceneMode.Single);
+        newScene.name = title;
+        EditorSceneManager.SaveScene(newScene, _Path + "/Scenes/" + title + ".unity", true);
+
+        Scene sceneRef = EditorSceneManager.OpenScene(_Path + "/Scenes/" + title + ".unity", OpenSceneMode.Single);
+
+        GameObject scriptManager = new GameObject("ScriptManager");
+
+        scriptManager.AddComponent<pluginAR>();
+
+        EditorSceneManager.SaveScene(sceneRef);
+    }
+
+    public void CreateBackground()
+    {
+        refCanvas = new GameObject("MainCanvas");
+        Canvas c = refCanvas.AddComponent<Canvas>();
+
+        c.renderMode = RenderMode.ScreenSpaceOverlay;
+
+        refCanvas.AddComponent<CanvasScaler>();
+        refCanvas.AddComponent<GraphicRaycaster>();
+
+        GameObject panel = new GameObject("background");
+        panel.AddComponent<CanvasRenderer>();
+        Image i = panel.AddComponent<Image>();
+
+        panel.GetComponent<Image>().sprite = background;
+        panel.transform.SetParent(refCanvas.transform, false);
+
+        panel.GetComponent<RectTransform>().offsetMin = new Vector2(0, 0);
+        panel.GetComponent<RectTransform>().offsetMax = new Vector2(0, 0);
+
+        panel.GetComponent<RectTransform>().anchorMin = new Vector2(0, 0);
+        panel.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
+    }
+
+    public void CreateOpenButton()
+    {
+        GameObject button = new GameObject("OpenScene");
+
+        button.AddComponent<Image>();
+        button.AddComponent<Button>();
+
+        button.GetComponent<Image>().preserveAspect = true;
+        button.transform.SetParent(refCanvas.transform, false);
+
+
+        button.GetComponent<RectTransform>().offsetMin = new Vector2(0, 0);
+        button.GetComponent<RectTransform>().offsetMax = new Vector2(0, 0);
+
+        button.GetComponent<RectTransform>().anchorMin = new Vector2(0.437f, 0.404f);
+        button.GetComponent<RectTransform>().anchorMax = new Vector2(0.56f, 0.604f);
+
+    }
+
+    public void ExitButton()
+    {
+        GameObject button = new GameObject("ExitApp");
+        button.AddComponent<Image>();
+        button.AddComponent<Button>();
+        button.transform.SetParent(refCanvas.transform, false);
+
+        button.GetComponent<RectTransform>().offsetMin = new Vector2(0, 0);
+        button.GetComponent<RectTransform>().offsetMax = new Vector2(0, 0);
+
+        button.GetComponent<RectTransform>().anchorMin = new Vector2(0.437f, 0.104f);
+        button.GetComponent<RectTransform>().anchorMax = new Vector2(0.56f, 0.288f);
+    }
+
+    public void ARScene()
+    {
+        _Path = Application.dataPath;
+        var newScene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+        newScene.name = title;
+        EditorSceneManager.SaveScene(newScene, _Path + "/Scenes/" + title + ".unity", true);
+
+        Scene sceneRef = EditorSceneManager.OpenScene(_Path + "/Scenes/" + title + ".unity", OpenSceneMode.Single);
+
+        GameObject scriptManager = new GameObject("ScriptManager");
+
+        scriptManager.AddComponent<pluginAR>();
+
+        GameObject _ARsession = new GameObject("ARsession");
+        _ARsession.AddComponent<ARSession>();
+        _ARsession.AddComponent<ARInputManager>();
+
+        GameObject _ARsessionOrigin = new GameObject("AR Session Origin");
+        _ARsessionOrigin.AddComponent<ARSessionOrigin>();
+        _ARsessionOrigin.AddComponent<ARPlaneManager>();
+
+        GameObject _ARcamera = new GameObject("AR camera");
+        _ARcamera.AddComponent<Camera>();
+        _ARcamera.AddComponent<TrackedPoseDriver>();
+        _ARcamera.AddComponent<ARCameraManager>();
+        _ARcamera.AddComponent<ARCameraBackground>();
+
+        GameObject _ARplane = new GameObject("ARplane");
+        _ARplane.AddComponent<ARPlane>();
+        _ARplane.AddComponent<ARPlaneMeshVisualizer>();
+        _ARplane.AddComponent<MeshCollider>();
+        _ARplane.AddComponent<MeshRenderer>();
+        _ARplane.AddComponent<MeshFilter>();
+        _ARplane.AddComponent<LineRenderer>();
+
+        _ARcamera.GetComponent<Camera>().backgroundColor = Color.black;
+        _ARcamera.transform.SetParent(_ARsessionOrigin.transform, false);
+
+        _ARplane.GetComponent<LineRenderer>().startWidth = 0.010F;
+        Material _customDebugPlane = new Material(Shader.Find("Standard"));
+        AssetDatabase.CreateAsset(_customDebugPlane, "Assets/Editor/Resources/customDebugPlane.mat");
+        _customLine = Resources.Load("customDebugPlane.mat", typeof(Material)) as Material;
+        Debug.Log(Resources.Load);
+
+
+        GameObject _placementIndicator = new GameObject("Placement Indicator");
+        GameObject _placementRef = GameObject.CreatePrimitive(PrimitiveType.Quad);
+        _placementRef.transform.Rotate(90.0f, 0f, 0f);
+
+        Material _imageRef = new Material(Shader.Find("Standard"));
+        AssetDatabase.CreateAsset(_imageRef, "Assets/_REFERENCES/MATERIALS/TrackingMaterial.mat");
+
+
+        _placementRef.GetComponent<Renderer>().material = _imageRef;
+        _placementRef.transform.SetParent(_placementIndicator.transform, false);
+
+
+        EditorSceneManager.SaveScene(sceneRef);
+    }
+
+}
+
+#endif

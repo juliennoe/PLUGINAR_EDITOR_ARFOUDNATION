@@ -1,0 +1,22 @@
+﻿<Properties StartupConfiguration="{05DF2575-ADEA-DA5F-CEB3-F86B7D05C4E4}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/pluginAR.cs">
+    <Files>
+      <File FileName="Assets/Scripts/pluginAR.cs" Line="79" Column="37" />
+      <File FileName="Assets/Scripts/TapToPlace.cs" Line="42" Column="9" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp-Editor PreferredExecutionTarget="Unity.Editor" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/Users/noe/Documents/_PROJETS_UNITY/UIElements_mac/Assets/pluginAR.cs" relfile="Assets/pluginAR.cs" line="298" column="1" />
+      <Breakpoint file="/Users/noe/Documents/_PROJETS_UNITY/UIElements_mac/Assets/pluginAR.cs" relfile="Assets/pluginAR.cs" line="299" column="1" />
+      <Breakpoint file="/Users/noe/Documents/_PROJETS_UNITY/UIElements_mac/Assets/pluginAR.cs" relfile="Assets/pluginAR.cs" line="300" column="1" />
+      <Breakpoint file="/Users/noe/Documents/_PROJETS_UNITY/UIElements_mac/Assets/pluginAR.cs" relfile="Assets/pluginAR.cs" line="301" column="1" />
+      <Breakpoint file="/Users/noe/Documents/_PROJETS_UNITY/UIElements_mac/Assets/Scripts/pluginAR.cs" relfile="Assets/Scripts/pluginAR.cs" line="295" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>

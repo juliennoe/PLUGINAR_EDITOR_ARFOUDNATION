@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Menu.unity
+    guid: 6ab643401d8b647f98f9be16a3972b94
+  - enabled: 1
+    path: Assets/Scenes/ARScene.unity
+    guid: 48fc614459cb6424498599309b5279a0
+  m_configObjects:
+    com.unity.xr.arkit.PlayerSettings: {fileID: 11400000, guid: d62d8fe2f81b54561aeb3ae36afffba2,
+      type: 2}
